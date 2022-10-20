@@ -2,22 +2,30 @@ const app = {
 
     decompte: null,
     cardbox: null,
+    compteurPoints: null,
+    hasardItem: null,
 
     init: function () {
-        console.log('init lancé');
+        console.log('init v3');
 
-        app.addEventListener();
+        nbPoints = document.querySelector('.container');
+        divPoints = document.createElement('div');
+        divPoints.classList.add('points');
+        nbPoints.append(divPoints);
+
+        app.addAllEventListener();
     },
 
-    addEventListener: function() {
+    addAllEventListener: function() {
         
         // Récupere les items card
         app.cardbox = document.querySelectorAll('.cible');
 
         for(const items of app.cardbox){
         // Ecouteur sur les items cards
-        items.addEventListener('click', app.handleClickCards);
+        items.addEventListener('click', app.handleClickRemoveCards);
         }
+
 
         // Récupere les bouttons 'Start' et 'Stop'
         const startBtn = document.querySelector('.start');
@@ -27,32 +35,60 @@ const app = {
         stopBtn.addEventListener('click', app.handleStopBtn);
     },
 
-    handleClickCards: function(evt) {
+    handleClickRemoveCards: function(evt) {
 
         const event = evt.currentTarget; 
         // Cibler le contenu
-        contenu1 = event.textContent;
-        //console.log(contenu1)
-        app.randomCircle();
-    },    
+        let contenu1 = event.textContent;
 
-    randomCircle: function() {
-
+        displayPoints = document.querySelector('.points');
+        //console.log(app.init.divPoints)
         
-        const nouveauContenu = "X";
-        const selectCard = document.querySelectorAll('.cible');
-        console.log(selectCard)
-        selectCard.innerHTML = nouveauContenu;
+        console.log('temps restant ' + app.decompte)
+        
+        if(app.decompte >= 0 && app.decompte != null) { 
+            
+            if(event.textContent === "X") {
+
+                app.compteurPoints++;
+                displayPoints.textContent = "Nombre de points : " + app.compteurPoints + " pts";
+
+                event.textContent = " ";
+                app.randomCircle();
+                
+            }
+        } 
+    },    
+    
+    randomCircle: function() {
+        
+        let randNumber = Math.floor(Math.random() * 8) + 1; 
+        //console.log(contenu1)
+        app.hasardItem = document.getElementById(randNumber);
+        app.hasardItem.textContent = "X";
+        
+        
+        //console.log(hasardItem)
+        //TODO Ajouter un contenu aléatoire dans une balise 'div'
+
+        //TODO changer 'la cible' aleatoirement jusqu'a ce que le temps soit écouler   
+        //TODO Tant que le contenu n'a pas été cliquer il ne disparrait pas  -- classList dans math.random ?
+        //TODO lorsque le contenu est cliqué le contenu disparait -- classList dans math.random ?
 
     },
     
     handleStartBtn: function() {
 
-        app.handleCountDown();
+        if (app.decompte == 0 || app.decompte == null) {
+
+            app.handleCountDown();
+            app.randomCircle();
+        } 
+        
     },
 
     handleStopBtn: function () {
-
+        
         clearInterval(app.decompte = 0);
            
     },
@@ -60,15 +96,20 @@ const app = {
     handleCountDown: function() {
 
         app.decompte = 5;
+        
         timer = setInterval(() => {
+            
+            let newDecompte = Math.floor(app.decompte)
+            console.log(app.decompte)
 
-            document.querySelector('#timer').innerHTML = "Temps restant : " + app.decompte;
+            document.querySelector('#timer').innerHTML = "Temps restant : " + newDecompte;
 
-            if(app.decompte === 0) {
-    
+            if(app.decompte <= 0) {
+                app.hasardItem.textContent = " ";
                 clearInterval(timer);
                 
                 document.querySelector('#timer').innerHTML = "Vous avez terminé !";
+                
     
             } else {
                 app.decompte--;
