@@ -4,9 +4,10 @@ const app = {
     cardbox: null,
     compteurPoints: null,
     hasardItem: null,
+    record: null,
 
     init: function () {
-        console.log('init v3');
+        console.log('init v5');
 
         nbPoints = document.querySelector('.container');
         divPoints = document.createElement('div');
@@ -14,6 +15,10 @@ const app = {
         nbPoints.append(divPoints);
 
         app.addAllEventListener();
+        // var t = 0;
+		// setInterval(function(){
+		// 	document.getElementById('cpt').innerHTML = ++t;
+		// },10);
     },
 
     addAllEventListener: function() {
@@ -25,7 +30,6 @@ const app = {
         // Ecouteur sur les items cards
         items.addEventListener('click', app.handleClickRemoveCards);
         }
-
 
         // Récupere les bouttons 'Start' et 'Stop'
         const startBtn = document.querySelector('.start');
@@ -55,7 +59,7 @@ const app = {
 
                 event.textContent = " ";
                 app.randomCircle();
-                
+
             }
         } 
     },    
@@ -79,6 +83,8 @@ const app = {
     
     handleStartBtn: function() {
 
+        app.compteurPoints = " ";
+
         if (app.decompte == 0 || app.decompte == null) {
 
             app.handleCountDown();
@@ -93,28 +99,33 @@ const app = {
            
     },
 
+    chronoAVirgule(x) {
+        return Number.parseFloat(x).toFixed(2);
+    },
+
     handleCountDown: function() {
 
-        app.decompte = 5;
+        app.decompte = 5*10;
         
         timer = setInterval(() => {
             
             let newDecompte = Math.floor(app.decompte)
             console.log(app.decompte)
 
-            document.querySelector('#timer').innerHTML = "Temps restant : " + newDecompte;
+            document.querySelector('#timer').textContent = "Temps restant : " + newDecompte.toFixed(2);
 
             if(app.decompte <= 0) {
                 app.hasardItem.textContent = " ";
                 clearInterval(timer);
                 
-                document.querySelector('#timer').innerHTML = "Vous avez terminé !";
+                document.querySelector('#timer').textContent = "Vous avez terminé !";
                 
-    
+                app.record = document.querySelector('.record').textContent = "Votre record est de " + app.compteurPoints + " points";
+
             } else {
-                app.decompte--;
+                app.decompte --;
             }
-        }, 1000);
+        }, 100);
     },
 }
 
