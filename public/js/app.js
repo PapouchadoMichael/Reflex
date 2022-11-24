@@ -105,14 +105,14 @@ const app = {
 
     handleCountDown: function() {
 
-        app.decompte = 5*10;
+        app.decompte = 50;
         
         timer = setInterval(() => {
             
             let newDecompte = Math.floor(app.decompte)
             console.log(app.decompte)
 
-            document.querySelector('#timer').textContent = "Temps restant : " + newDecompte.toFixed(2);
+            document.querySelector('#timer').textContent = "Temps restant : " + (newDecompte/10).toFixed(2);
 
             if(app.decompte <= 0) {
                 app.hasardItem.textContent = " ";
